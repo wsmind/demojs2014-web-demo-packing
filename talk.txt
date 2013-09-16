@@ -26,14 +26,14 @@ However
 web legacy
   open source (-> internet)
   continuous updates, deployment, testing
-  designed for the masses
+  release model encourages accessibility and ergonomy
 
 console legacy
   everything closed (e.g $20000 devkit), closed source everywhere
   one-shot release (disc)
-  started as niche
 
 Today / Content creation pipelines
+IMPROVEMENTS!!!
 
 console games
   in-house engines + tools
@@ -46,3 +46,4 @@ web games
   emscripten
   "native"
   developer driven
+
