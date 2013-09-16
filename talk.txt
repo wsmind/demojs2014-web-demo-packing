@@ -1,0 +1,48 @@
+Collision of two worlds: console versus web
+
+In the last years, we've seen the web becoming more and more of a gaming platform, to the point where we can now run real games in the browser. At the same time, the traditional game industry have been striving to get console games more connected, social, and overall, to bring consoles closer to the web world.
+
+However, while these two industries are somehow converging, they still have dramatically different history, values, processes and philosophy. This talk will put console and web development in perspective, compare their inner workings, and humbly try to extract what each side could learn from the other.
+
+
+
+Who am I?
+  Ubisoft
+  WebGL Demomaker
+
+You said collision?
+  Consoles going online
+    Not only multiplayer gameplay
+    Leaderboards, achievements (e.g XBLA)
+    Analytics
+    SOCIAL
+  Web -> gaming
+    Flash games, FB games
+    Unreal, Unity
+  PS4 in WebGL
+
+However
+
+web legacy
+  open source (-> internet)
+  continuous updates, deployment, testing
+  designed for the masses
+
+console legacy
+  everything closed (e.g $20000 devkit), closed source everywhere
+  one-shot release (disc)
+  started as niche
+
+Today / Content creation pipelines
+
+console games
+  in-house engines + tools
+  off-the-shelf engine
+  data-driven process!!
+  artist driven
+
+web games
+  flash
+  emscripten
+  "native"
+  developer driven
