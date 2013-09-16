@@ -1,0 +1,220 @@
+﻿<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Console vs. Web</title>
+
+		<meta name="description" content="Collision of two worlds: console versus web">
+		<meta name="author" content="Rémi Papillié">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		
+		<style type="text/css">
+			#test
+			{
+				position: absolute;
+				left: 0px;
+				right: 0px;
+				top: 0px;
+				bottom: 0px;
+				background-color: #f00;
+				
+			}
+			
+			.demo #test
+			{
+				display: block;
+			}
+			
+			.column-left
+			{
+				width: 48%;
+				float: left;
+			}
+			
+			.column-right
+			{
+				width: 48%;
+				float: right;
+			}
+		</style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<!--<div id="#test">
+			plop
+		</div>-->
+		
+		<div class="reveal">
+
+			<div class="slides">
+				<section>
+					<h1>Collision of two worlds</h1>
+					<h3>Console versus Web</h3>
+					<p>
+						<small><a href="https://github.com/wsmind/">Rémi Papillié</a> / <a href="http://twitter.com/wsmind">@wsmind</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Agenda</h2>
+					<ul>
+						<li>You said collision?</li>
+						<li>Web & console legacy</li>
+						<li>Creation pipelines</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Who am I?</h2>
+						<p><small>Wait! Who's this guy?</small></p>
+					</section>
+					<section>
+						<h2>Ubisoft (Paris)</h2>
+						<p class="fragment">Engine developer</p>
+						<p class="fragment">
+							<img src="assets/Just_Dance_2014_Official_NTSC_Cover_Art.jpg" alt="Just Dance 2014" />
+						</p>
+						<p class="fragment">Casual on console!</p>
+					</section>
+					<section data-state="demo" data-demo="plop">
+						<h2>Spare time</h2>
+						<div class="column-left">
+							<p>Demoparties</p>
+						</div> 
+						<div class="column-right">
+							<p>Game jams</p>
+						</div> 
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>You said collision?</h2>
+					</section>
+					<section>
+						<h2>Consoles are connected</h2>
+						<p class="fragment">Not only multiplayer gameplay</p>
+						<p class="fragment">Leaderboards, achievements (e.g XBLA)</p>
+						<p class="fragment">Analytics</p>
+						<p class="fragment">Social!</p>
+						<p class="fragment">XB1 attempt at always connected</p>
+					</section>
+					<section>
+						<h2>Web gaming is real</h2>
+						<p class="fragment">Flash games</p>
+						<p class="fragment">Facebook games</p>
+						<p class="fragment">Big engine ports (e.g Unreal, Unity)</p>
+					</section>
+					<section>
+						<h2>PS4 in browser!</h2>
+						<iframe frameborder="0" height="480" width="854" allowFullScreen webkitallowfullscreen="true" mozallowfullscreen="true" src="http://sketchfab.com/m4jig20?autostart=0&transparent=0&autospin=0&controls=1"></iframe>
+					</section>
+				</section>
+				
+				<section data-background="#a50" data-background-transition="slide">
+					<h2>So, Web and console are now almost the same industry?</h2>
+				</section>
+				<section data-background="#500" data-background-transition="slide">
+					<h2>No.</h2>
+					<p><small>But why?</small></p>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Web legacy</h2>
+					</section>
+					<section>
+						<h2>Everything is Open Source</h2>
+						<p class="fragment">In line with Internet base principles</p>
+						<p class="fragment">Not free, not used (more or less)</p>
+						<p class="fragment">Service-oriented</p>
+						<p class="fragment">Buy storage or bandwidth, not code</p>
+					</section>
+					<section>
+						<h2>Updates built-in</h2>
+						<p class="fragment">F5 updates your software</p>
+						<p class="fragment">Continuous integration/deployment</p>
+						<p class="fragment">Lots of tests</p>
+					</section>
+					<section>
+						<h2>Release early, profit (maybe) later</h2>
+						<p class="fragment">Hard to be profitable from the start</p>
+						<p class="fragment">Usually start small, then grow</p>
+						<p class="fragment">Increased need for visible, immediate value</p>
+					</section>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Console legacy</h2>
+					</section>
+					<section>
+						<h2>Closed</h2>
+						<p class="fragment">Open source is <em>forbidden</em></p>
+					</section>
+				</section>
+				
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+			
+			function updateDemo(event)
+			{
+				var demoAttribute = event.currentSlide.getAttribute("data-demo")
+				//if (demoAttribute)
+				//	alert(demoAttribute)
+			}
+			
+			Reveal.addEventListener('ready', updateDemo)
+			Reveal.addEventListener('slidechanged', updateDemo)
+		</script>
+
+	</body>
+</html>
