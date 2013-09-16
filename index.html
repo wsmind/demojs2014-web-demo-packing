@@ -89,7 +89,7 @@
 						<h2>Who am I?</h2>
 						<p><small>Wait! Who's this guy?</small></p>
 					</section>
-					<section>
+					<section data-background="assets/Ubilogo_Bg.png" data-background-size="2000px" data-background-position="left top">
 						<h2>Ubisoft (Paris)</h2>
 						<p class="fragment">Engine developer</p>
 						<p class="fragment">
@@ -129,6 +129,7 @@
 					<section>
 						<h2>PS4 in browser!</h2>
 						<iframe frameborder="0" height="480" width="854" allowFullScreen webkitallowfullscreen="true" mozallowfullscreen="true" src="http://sketchfab.com/m4jig20?autostart=0&transparent=0&autospin=0&controls=1"></iframe>
+						<p>Model by Volumic @ Sketchfab</p>
 					</section>
 				</section>
 				
@@ -171,14 +172,14 @@
 						<h2>Console legacy</h2>
 					</section>
 					<section>
-						<h2>Closed</h2>
+						<h2>Traditionally closed</h2>
 						<p class="fragment">Nothing open source</p>
 						<p class="fragment">Open source is <em>forbidden</em></p>
 						<p class="fragment">Expensive (e.g some devkits cost $20000)</p>
 						<p class="fragment">Certification process</p>
 					</section>
 					<section>
-						<h2>One-shot release</h2>
+						<h2>One-shot releases</h2>
 						<p class="fragment">Burn and forget <span class="fragment">(&gt; 50% console market)</span></p>
 						<p class="fragment">But you can update! <span class="fragment">Yeah, well...</span></p>
 						<p class="fragment">Not all platforms (Wii)</p>
@@ -262,6 +263,8 @@
 					"uniform float effect3;",
 					"uniform float perspective;",
 					"",
+					"uniform float pointSize;",
+					"",
 					"float rand(vec2 co){",
 					"	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);",
 					"}",
@@ -276,7 +279,7 @@
 					"	vec2 result2 = vec2(r * 2.0 - 1.0, sin(time * 0.1 + index) * 0.3 * (x + 1.0 + m) - sin(x * 3.0) * 0.3 - x * 0.5 + smoothstep(0.0, m2 * 0.01, sin(time) * 0.5 + 0.5));",
 					"	vec2 result3 = vec2(cos(index + time * (0.9 - r)), sin(index + time * 0.8)) * (0.65 + 0.3 * r);",
 					"	gl_Position = vec4(result1 * effect1 + result2 * effect2 + result3 * effect3, 0.0, 1.0 + perspective * index * 0.0001);",
-					"	gl_PointSize = 6.0;",
+					"	gl_PointSize = pointSize;",
 					"}",
 				].join("\n")
 				
@@ -342,6 +345,11 @@
 					particleShader.setFloatUniform("effect2", smooth(1.0 - Math.min(Math.abs(modT - 1.0), 1.0)))
 					particleShader.setFloatUniform("effect3", smooth(1.0 - Math.min(Math.abs(modT - 2.0), 1.0)))
 					particleShader.setFloatUniform("perspective", 0)
+					
+					// point size in pixel must be relative to screen/canvas resolution
+					// here, the size is expressed as relative to 1080p
+					var pointSize = 6.0
+					particleShader.setFloatUniform("pointSize", pointSize * canvas.height / 1080.0)
 					
 					var indexLocation = particleShader.getAttributeLocation("index")
 					particleBuffer.bind(indexLocation)
