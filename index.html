@@ -19,18 +19,20 @@
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 		
 		<style type="text/css">
-			#test
+			#canvas
 			{
 				position: absolute;
 				left: 0px;
 				right: 0px;
 				top: 0px;
 				bottom: 0px;
-				background-color: #f00;
-				
+				margin: 0px;
+				padding: 0px;
+				background-color: #111;
+				display: none;
 			}
 			
-			.demo #test
+			.demo #canvas
 			{
 				display: block;
 			}
@@ -60,9 +62,9 @@
 
 	<body>
 
-		<!--<div id="#test">
-			plop
-		</div>-->
+		<canvas id="canvas">
+			no canvas
+		</canvas>
 		
 		<div class="reveal">
 
@@ -97,7 +99,7 @@
 						</p>
 						<p class="fragment">Casual on console!</p>
 					</section>
-					<section data-state="demo" data-demo="plop">
+					<section data-state="demo" data-demo="particles">
 						<h2>Spare time</h2>
 						<div class="column-left">
 							<p>Demoparties</p>
@@ -181,6 +183,9 @@
 
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
+		
+		<script src="js/ShaderProgram.js"></script>
+		<script src="js/VertexBuffer.js"></script>
 
 		<script>
 			// Full list of configuration options available here:
@@ -205,15 +210,138 @@
 				]
 			});
 			
-			function updateDemo(event)
-			{
-				var demoAttribute = event.currentSlide.getAttribute("data-demo")
-				//if (demoAttribute)
-				//	alert(demoAttribute)
-			}
-			
 			Reveal.addEventListener('ready', updateDemo)
 			Reveal.addEventListener('slidechanged', updateDemo)
+			
+			window.addEventListener("resize", resize)
+			
+			function resize()
+			{
+				canvas.width = document.body.clientWidth
+				canvas.height = document.body.clientHeight
+				gl.viewport(0, 0, canvas.width, canvas.height)
+			}
+			
+			var canvas = null
+			var gl = null
+			var demoRunning = false
+			var demoEffect = ""
+			
+			var particleBuffer = null
+			
+			function createBuffers()
+			{
+				var particleCount = 64 * 1024
+				var particles = new Uint16Array(particleCount)
+				for (var i = 0; i < particleCount; i++)
+					particles[i] = i
+				
+				particleBuffer = new VertexBuffer(1, gl.UNSIGNED_SHORT, particles)
+			}
+			
+			var particleShader = null
+			
+			function createShaders()
+			{
+				var particleVertexShader = [
+					"precision highp float;",
+					"attribute float index;",
+					"",
+					"uniform float effect1;",
+					"uniform float effect2;",
+					"uniform float effect3;",
+					"uniform float perspective;",
+					"",
+					"float rand(vec2 co){",
+					"	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);",
+					"}",
+					"uniform float time;",
+					"void main()",
+					"{",
+					"	float x = 2.0 * index / 65536.0 - 1.0;",
+					"	float m = mod(index, 3.0);",
+					"	float m2 = mod(index, 300.0);",
+					"	float r = rand(vec2(index, x));",
+					"	vec2 result1 = vec2(x, sin(time * 0.1 + index) * 0.3 * (x + 1.0 + m) - sin(x * 3.0) * 0.3 - x * 0.5);",
+					"	vec2 result2 = vec2(r * 2.0 - 1.0, sin(time * 0.1 + index) * 0.3 * (x + 1.0 + m) - sin(x * 3.0) * 0.3 - x * 0.5 + smoothstep(0.0, m2 * 0.01, sin(time) * 0.5 + 0.5));",
+					"	vec2 result3 = vec2(cos(index + time * (0.9 - r)), sin(index + time * 0.8)) * (0.65 + 0.3 * r);",
+					"	gl_Position = vec4(result1 * effect1 + result2 * effect2 + result3 * effect3, 0.0, 1.0 + perspective * index * 0.0001);",
+					"	gl_PointSize = 6.0;",
+					"}",
+				].join("\n")
+				
+				var particleFragmentShader = [
+					"precision highp float;",
+					"void main()",
+					"{",
+					"	float l = (1.0 - distance(gl_PointCoord, vec2(0.5, 0.5)) * 2.0);",
+					"	l *= l * 0.4;",
+					"	gl_FragColor = vec4(l, l, l, 0.0);",
+					"}",
+				].join("\n")
+				
+				particleShader = new ShaderProgram(particleVertexShader, particleFragmentShader)
+			}
+			
+			function updateDemo(event)
+			{
+				if (!canvas)
+				{
+					canvas = document.getElementById("canvas")
+					gl = canvas.getContext("experimental-webgl")
+					resize()
+					
+					createBuffers()
+					createShaders()
+				}
+				
+				var demoAttribute = event.currentSlide.dataset.demo
+				if (demoAttribute)
+				{
+					// start rendering
+					demoRunning = true
+					demoEffect = demoAttribute
+					requestAnimationFrame(demoRender)
+				}
+				else
+				{
+					demoRunning = false
+				}
+			}
+			
+			function smooth(t)
+			{
+				return t * t * (3.0 - 2.0 * t)
+			}
+			
+			function demoRender(time)
+			{
+				gl.clearColor(0.0, 0.0, 0.0, 0.0)
+				gl.clear(gl.COLOR_BUFFER_BIT)
+				
+				gl.enable(gl.BLEND)
+				gl.blendFunc(gl.ONE, gl.ONE)
+				
+				if (demoEffect == "particles")
+				{
+					particleShader.bind()
+					particleShader.setFloatUniform("time", time * 0.001)
+					
+					var modT = (time * 0.0001) % 3.0
+					particleShader.setFloatUniform("effect1", smooth(1.0 - Math.min(Math.abs(modT - 0.0), 1.0)) + smooth(1.0 - Math.min(Math.abs(modT - 3.0), 1.0)))
+					particleShader.setFloatUniform("effect2", smooth(1.0 - Math.min(Math.abs(modT - 1.0), 1.0)))
+					particleShader.setFloatUniform("effect3", smooth(1.0 - Math.min(Math.abs(modT - 2.0), 1.0)))
+					particleShader.setFloatUniform("perspective", 0)
+					
+					var indexLocation = particleShader.getAttributeLocation("index")
+					particleBuffer.bind(indexLocation)
+					
+					gl.drawArrays(gl.POINTS, 0, particleBuffer.itemCount)
+				}
+				
+				if (demoRunning)
+					requestAnimationFrame(demoRender)
+			}
 		</script>
 
 	</body>
