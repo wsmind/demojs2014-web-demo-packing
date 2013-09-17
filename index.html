@@ -158,17 +158,24 @@
 						<p class="fragment">Buy storage or bandwidth, not code</p>
 					</section>
 					<section>
-						<h2>Updates built-in</h2>
+						<h2>Easy deployment and update</h2>
+						<p class="fragment">Hosting is accessible</p>
 						<p class="fragment">F5 updates your software</p>
 						<p class="fragment">Continuous integration/deployment</p>
 						<p class="fragment">Lots of tests</p>
 					</section>
 					<section>
-						<h2>Release early, profit (maybe) later</h2>
+						<h2>Release early, profit later (maybe)</h2>
 						<p class="fragment">Hard to be profitable from the start</p>
 						<p class="fragment">Usually start small, then grow</p>
 						<p class="fragment">Increased need for visible, immediate value</p>
 						<p class="fragment">Side effect: encouraged accessibility and ergonomy</p>
+					</section>
+					<section>
+						<h2>Developer-centric</h2>
+						<p class="fragment">Most of web tools are code-based (html, css, js, etc.)</p>
+						<p class="fragment">Realm of designer-coders</p>
+						<p class="fragment">Few artists, in proportion</p>
 					</section>
 				</section>
 				
@@ -191,6 +198,41 @@
 						<p class="fragment">Still heavy and expensive process</p>
 						<p class="fragment">Side effect: bad code at end of production</p>
 					</section>
+					<section>
+						<h2>Production-centric</h2>
+						<p class="fragment">Developers only support production</p>
+						<p class="fragment">Few of them compared to artists (~10%)</p>
+						<p class="fragment">Most tools usable by artists (no code required)</p>
+						<p class="fragment">Data-driven engines</p>
+					</section>
+				</section>
+				
+				<section data-background="#a50" data-background-transition="slide">
+					<h2>This changes the way we make games</h2>
+				</section>
+				<section data-background="#580" data-background-transition="slide">
+					<h2>Maybe we could share some tips</h2>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Traditional console production pipeline</h2>
+					</section>
+					<section>
+						<h2>TODO: schema</h2>
+						<p class="fragment">Artists, GPP, engine, tools</p>
+						<p class="fragment">morph to off-the-shelf toolchain</p>
+					</section>
+				</section>
+				
+				<section data-background="#222" data-background-transition="slide">
+					<h2>Thanks</h2>
+					<p>TODO</p>
+				</section>
+				
+				<section data-state="demo" data-demo="question">
+					<h2>Questions?</h2>
+					<p><small>And some more particles!</small></p>
 				</section>
 				
 			</div>
@@ -266,6 +308,7 @@
 					"uniform float effect1;",
 					"uniform float effect2;",
 					"uniform float effect3;",
+					"//uniform float effect4;",
 					"uniform float perspective;",
 					"",
 					"uniform float pointSize;",
@@ -277,13 +320,16 @@
 					"void main()",
 					"{",
 					"	float x = 2.0 * index / 65536.0 - 1.0;",
+					"	//float x2 = index / 65536.0;",
 					"	float m = mod(index, 3.0);",
 					"	float m2 = mod(index, 300.0);",
 					"	float r = rand(vec2(index, x));",
+					"	//float r2 = rand(vec2(index, x + 100.0));",
 					"	vec2 result1 = vec2(x, sin(time * 0.1 + index) * 0.3 * (x + 1.0 + m) - sin(x * 3.0) * 0.3 - x * 0.5);",
 					"	vec2 result2 = vec2(r * 2.0 - 1.0, sin(time * 0.1 + index) * 0.3 * (x + 1.0 + m) - sin(x * 3.0) * 0.3 - x * 0.5 + smoothstep(0.0, m2 * 0.01, sin(time) * 0.5 + 0.5));",
 					"	vec2 result3 = vec2(cos(index + time * (0.9 - r)), sin(index + time * 0.8)) * (0.65 + 0.3 * r);",
-					"	gl_Position = vec4(result1 * effect1 + result2 * effect2 + result3 * effect3, 0.0, 1.0 + perspective * index * 0.0001);",
+					"	//vec2 result4 = vec2(sin(x2 * 3.14), cos(x2 * 3.14)) * pow(x2, 0.2) * (1.0 + sin(time) * 0.1) + vec2(r, r2) * 0.1;",
+					"	gl_Position = vec4(result1 * effect1 + result2 * effect2 + result3 * effect3, 0.0, 1.0 + perspective * m);",
 					"	gl_PointSize = pointSize;",
 					"}",
 				].join("\n")
@@ -340,27 +386,36 @@
 				gl.enable(gl.BLEND)
 				gl.blendFunc(gl.ONE, gl.ONE)
 				
+				particleShader.bind()
+				particleShader.setFloatUniform("time", time * 0.001)
+				
 				if (demoEffect == "particles")
 				{
-					particleShader.bind()
-					particleShader.setFloatUniform("time", time * 0.001)
-					
 					var modT = (time * 0.0001) % 3.0
 					particleShader.setFloatUniform("effect1", smooth(1.0 - Math.min(Math.abs(modT - 0.0), 1.0)) + smooth(1.0 - Math.min(Math.abs(modT - 3.0), 1.0)))
 					particleShader.setFloatUniform("effect2", smooth(1.0 - Math.min(Math.abs(modT - 1.0), 1.0)))
 					particleShader.setFloatUniform("effect3", smooth(1.0 - Math.min(Math.abs(modT - 2.0), 1.0)))
-					particleShader.setFloatUniform("perspective", 0)
-					
-					// point size in pixel must be relative to screen/canvas resolution
-					// here, the size is expressed as relative to 1080p
-					var pointSize = 6.0
-					particleShader.setFloatUniform("pointSize", pointSize * canvas.height / 1080.0)
-					
-					var indexLocation = particleShader.getAttributeLocation("index")
-					particleBuffer.bind(indexLocation)
-					
-					gl.drawArrays(gl.POINTS, 0, particleBuffer.itemCount)
+					//particleShader.setFloatUniform("effect4", 0.0)
+					particleShader.setFloatUniform("perspective", 0.0)
 				}
+				else if (demoEffect == "question")
+				{
+					particleShader.setFloatUniform("effect1", 0.0)
+					particleShader.setFloatUniform("effect2", 0.0)
+					particleShader.setFloatUniform("effect3", 1.0)
+					//particleShader.setFloatUniform("effect4", 0.0)
+					particleShader.setFloatUniform("perspective", Math.sin(time * 0.001) * 0.04 + 0.04)
+				}
+				
+				// point size in pixel must be relative to screen/canvas resolution
+				// here, the size is expressed as relative to 1080p
+				var pointSize = 6.0
+				particleShader.setFloatUniform("pointSize", pointSize * canvas.height / 1080.0)
+				
+				var indexLocation = particleShader.getAttributeLocation("index")
+				particleBuffer.bind(indexLocation)
+				
+				gl.drawArrays(gl.POINTS, 0, particleBuffer.itemCount)
 				
 				if (demoRunning)
 					requestAnimationFrame(demoRender)

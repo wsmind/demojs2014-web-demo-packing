@@ -21,29 +21,27 @@ You said collision?
     Unreal, Unity
   PS4 in WebGL
 
-However
+Same, but...
 
 web legacy
   open source (-> internet)
   continuous updates, deployment, testing
   release model encourages accessibility and ergonomy
+  developer-centric
 
 console legacy
   everything closed (e.g $20000 devkit), closed source everywhere
   one-shot release (disc)
+  production-centric
 
 Today / Content creation pipelines
 IMPROVEMENTS!!!
 
 console games
   in-house engines + tools
-  off-the-shelf engine
-  data-driven process!!
-  artist driven
+  off-the-shelf engine!
 
 web games
-  flash
   emscripten
-  "native"
-  developer driven
+  "native" (what we lost from flash)
 
