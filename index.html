@@ -244,14 +244,21 @@
 					<section>
 						<h2>Two major ways</h2>
 						<div class="column-left fragment">
-							<h3>Cross-compilation (emscripten)</h3>
+							<h3>Cross-compilation</h3>
+							<p class="fragment">Emscripten + asm.js</p>
+							<p class="fragment">Duetto</p>
+							<p class="fragment">(NaCl)</p>
 						</div>
 						<div class="column-right fragment">
-							<h3>Native (THREE.js, tQuery, PlayCanvas)</h3>
+							<h3>"Native"</h3>
+							<p class="fragment">THREE.js + tQuery</p>
+							<p class="fragment">PlayCanvas, ImpactJS</p>
+							<p class="fragment">Many others!</p>
 						</div> 
 					</section>
 					<section>
 						<h2>Cross-compile C++ to js</h2>
+						<p><small>(code! finally!)</small></p>
 <pre class="fragment"><code>#if defined(ANDROID) || defined(EMSCRIPTEN)
     GL_CHECK(glClearDepthf(depth));
 #else
@@ -260,7 +267,6 @@
 </code></pre>
 <pre class="fragment"><code>#ifdef EMSCRIPTEN
     emscripten_set_main_loop(em_main_loop, 0, 0);
-    return 0;
 #else
     while (glfwGetWindowParam(GLFW_OPENED))
     {
@@ -272,17 +278,25 @@
 					</section>
 					<section>
 						<h2>Cross-compile C++ to js</h2>
-						<p class="fragment">Most natural evolution from console</p>
-						<p class="fragment">(Almost) ideal for cross-platform tech</p>
+						<p class="fragment">Most natural path for existing techs</p>
+						<p class="fragment">Suited for cross-platform engines</p>
 						<p class="fragment">Basically a new platform</p>
 						<p class="fragment">Some shortcomings though (threading)</p>
 					</section>
 					<section>
-						<h2>Native HTML5</h2>
+						<h2>"Native" HTML5</h2>
 						<p class="fragment">The most "webbish" way</p>
-						<p class="fragment">Need tools to allow artist-driven prod</p>
-						<p class="fragment"><em>Some</em> engines have them (ImpactJS, PlayCanvas)</p>
-						<p class="fragment">Problem to solve: communication with DCC tools (TODO: Adobe Generator)</p>
+						<p class="fragment">Benefits from Web ecosystem (e.g developer tools)</p>
+						<p class="fragment">Editor availability</p>
+						<p class="fragment">Javascript is faster to write than C++</p>
+						<p class="fragment">Reuse of cool idioms (e.g tQuery)</p>
+					</section>
+					<section>
+						<h2>"Native" HTML5</h2>
+						<p class="fragment">Need tools to allow artist-driven production (Flash anyone?)</p>
+						<p class="fragment"><em>Some</em> engines have them (e.g ImpactJS, PlayCanvas)</p>
+						<p class="fragment">Interesting problem: communication with DCC tools</p>
+						<p class="fragment">Adobe Generator (Photoshop CC) is a start</p>
 					</section>
 				</section>
 				
