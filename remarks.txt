@@ -1,0 +1,9 @@
+add conclusion (convergence)
+tips not obvious
+improve transitions
+console -> REST
+unity html5
+CI , tests needed
+more focused
+20,000
+pas JD comme exemple
