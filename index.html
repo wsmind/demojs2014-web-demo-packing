@@ -97,7 +97,7 @@
 						</p>
 						<p class="fragment">Casual on console!</p>
 					</section>
-					<section data-state="demo" data-demo="particles">
+					<section data-state="demo" data-demo="spareTime">
 						<h2>Spare time</h2>
 						<div class="column-left fragment">
 							<h3>Demoparties</h3>
@@ -209,7 +209,7 @@
 				</section>
 				
 				<section data-background="#a50" data-background-transition="slide">
-					<h2>This changes the way we make games</h2>
+					<h2>Legacy changes the way we make games</h2>
 				</section>
 				<section data-background="#580" data-background-transition="slide">
 					<h2>Maybe we could share some tips</h2>
@@ -240,21 +240,44 @@
 						<h2>Two major ways</h2>
 						<div class="column-left fragment">
 							<h3>Cross-compilation (emscripten)</h3>
-							<p class="fragment">(Almost) ideal for cross-platform tech</p>
-							<p class="fragment">Basically a new platform</p>
-							<p class="fragment">Some shortcomings though (threading)</p>
 						</div>
 						<div class="column-right fragment">
-							<h3>Native</h3>
-							<p class="fragment">THREE.js, tQuery, PlayCanvas</p>
-							<p class="fragment">The most "webbish" way</p>
+							<h3>Native (THREE.js, tQuery, PlayCanvas)</h3>
 						</div> 
 					</section>
 					<section>
+						<h2>Cross-compile C++ to js</h2>
+<pre class="fragment"><code>#if defined(ANDROID) || defined(EMSCRIPTEN)
+    GL_CHECK(glClearDepthf(depth));
+#else
+    GL_CHECK(glClearDepth(depth));
+#endif
+</code></pre>
+<pre class="fragment"><code>#ifdef EMSCRIPTEN
+    emscripten_set_main_loop(em_main_loop, 0, 0);
+    return 0;
+#else
+    while (glfwGetWindowParam(GLFW_OPENED))
+    {
+        application->update();
+        glfwSwapBuffers();
+    }
+#endif
+</code></pre>
+					</section>
+					<section>
+						<h2>Cross-compile C++ to js</h2>
+						<p class="fragment">Most natural evolution from console</p>
+						<p class="fragment">(Almost) ideal for cross-platform tech</p>
+						<p class="fragment">Basically a new platform</p>
+						<p class="fragment">Some shortcomings though (threading)</p>
+					</section>
+					<section>
 						<h2>Native HTML5</h2>
+						<p class="fragment">The most "webbish" way</p>
 						<p class="fragment">Need tools to allow artist-driven prod</p>
 						<p class="fragment"><em>Some</em> engines have them (ImpactJS, PlayCanvas)</p>
-						<p class="fragment">Problem to solve: communication with DCC tools</p>
+						<p class="fragment">Problem to solve: communication with DCC tools (TODO: Adobe Generator)</p>
 					</section>
 				</section>
 				
@@ -263,7 +286,7 @@
 					<p>TODO</p>
 				</section>
 				
-				<section data-state="demo" data-demo="question">
+				<section data-state="demo" data-demo="questions">
 					<h2>Questions?</h2>
 					<p><small>And some more particles!</small></p>
 				</section>
@@ -422,7 +445,7 @@
 				particleShader.bind()
 				particleShader.setFloatUniform("time", time * 0.001)
 				
-				if (demoEffect == "particles")
+				if (demoEffect == "spareTime")
 				{
 					var modT = (time * 0.0001) % 3.0
 					particleShader.setFloatUniform("effect1", smooth(1.0 - Math.min(Math.abs(modT - 0.0), 1.0)) + smooth(1.0 - Math.min(Math.abs(modT - 3.0), 1.0)))
@@ -431,7 +454,7 @@
 					//particleShader.setFloatUniform("effect4", 0.0)
 					particleShader.setFloatUniform("perspective", 0.0)
 				}
-				else if (demoEffect == "question")
+				else if (demoEffect == "questions")
 				{
 					particleShader.setFloatUniform("effect1", 0.0)
 					particleShader.setFloatUniform("effect2", 0.0)
