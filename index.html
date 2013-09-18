@@ -82,6 +82,7 @@
 					<p>Console and Web convergence</p>
 					<p>Web &amp; console legacy</p>
 					<p>Content creation pipelines</p>
+					<p>Improvement ideas</p>
 				</section>
 
 				<section>
@@ -125,7 +126,7 @@
 						<p class="fragment">XB1 attempt at always connected</p>
 					</section>
 					<section>
-						<h2>Web gaming is real</h2>
+						<h2>Gaming on the Web</h2>
 						<p class="fragment">Flash games</p>
 						<p class="fragment">Facebook games</p>
 						<p class="fragment">HTML5 ports of big engines (e.g Unreal, Unigine)</p>
@@ -154,12 +155,10 @@
 						<p class="fragment">In line with Internet base principles</p>
 						<p class="fragment">Not free, not used</p>
 						<p class="fragment">Service-oriented</p>
-						<p class="fragment">Buy storage or bandwidth, not code</p>
 					</section>
 					<section>
 						<h2>Easy deployment</h2>
 						<p class="fragment">Hosting is cheap</p>
-						<p class="fragment">Fast iteration time</p>
 						<p class="fragment">F5 updates your software</p>
 						<p class="fragment">Continuous integration/deployment</p>
 						<p class="fragment">=> Lots of tests</p>
@@ -200,7 +199,7 @@
 					</section>
 					<section>
 						<h2>One-shot marketing</h2>
-						<p class="fragment">You got only one try!</p>
+						<p class="fragment">You only got one try!</p>
 						<p class="fragment"><img src="assets/typical-sales.png" alt="Sales" /></p>
 					</section>
 					<section>
@@ -215,9 +214,6 @@
 				<section data-background="#a50" data-background-transition="slide">
 					<h2>Legacy changes the way we make games</h2>
 				</section>
-				<section data-background="#580" data-background-transition="slide">
-					<h2>Maybe we could share some tips</h2>
-				</section>
 				
 				<section>
 					<section>
@@ -228,14 +224,63 @@
 						<p class="fragment"><img src="assets/console-pipeline.png" height="500px" alt="Console production pipeline" /></p>
 					</section>
 					<section>
-						<h2>HTML5 pipeline</h2>
-						<h3>Two major ways</h3>
+						<h2>HTML5 pipelines</h2>
 						<div class="column-left fragment">
 							<h3>Cross-compile</h3>
+							<p class="fragment">Natural path for existing techs</p>
+							<p class="fragment">Suited for cross-platform</p>
+							<p class="fragment">Some shortcomings though (e.g threading)</p>
 						</div>
 						<div class="column-right fragment">
 							<h3>Write JS</h3>
+							<p class="fragment">Web ecosystem (tools)</p>
+							<p class="fragment">Javascript faster to write than C++</p>
+							<p class="fragment">Editor availability</p>
+							<p class="fragment">Reuse cool idioms</p>
 						</div> 
+					</section>
+				</section>
+				
+				<section data-background="#580" data-background-transition="slide">
+					<h2>Maybe we could share some tips</h2>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Improvement ideas</h2>
+					</section>
+					<section>
+						<h2>Process example:<br />engine delivery</h2>
+						<p class="fragment">Currently: automated build, but manual testing</p>
+						<p class="fragment">Max release frequency: twice a day (closer to deadlines)</p>
+						<p class="fragment">Could benefit from automated testing</p>
+						<p class="fragment">Better reliability, possible faster releases</p>
+					</section>
+					<section>
+						<h2>JS engines</h2>
+						<p class="fragment">Need tools to allow artist-driven production (Flash anyone?)</p>
+						<p class="fragment"><em>Some</em> techs have them</p>
+						<p class="fragment">Interesting problem: communication with DCC tools</p>
+						<p class="fragment">Adobe Generator (Photoshop CC) is a start</p>
+					</section>
+				</section>
+				
+				<section>
+					<h2>Takeaway</h2>
+					<p class="fragment">We're all making games, but in different ways</p>
+					<p class="fragment">Sharing knowledge between technologies is valuable</p>
+					<p class="fragment">Put the artists in charge!</p>
+					<p class="fragment">Thanks</p>
+				</section>
+				
+				<section data-state="demo" data-demo="questions">
+					<h2>Questions?</h2>
+					<p><small>And some more particles!</small></p>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Bonus slides</h2>
 					</section>
 					<section>
 						<h2>Cross-compile C++ to js</h2>
@@ -258,60 +303,13 @@
 </code></pre>
 					</section>
 					<section>
-						<h2>Cross-compile C++ to js</h2>
-						<p class="fragment">Most natural path for existing techs</p>
-						<p class="fragment">Suited for cross-platform engines</p>
-						<p class="fragment">Some shortcomings though (threading)</p>
-					</section>
-					<section>
-						<h2>Write JS directly</h2>
-						<p class="fragment">The most "webbish" way</p>
-						<p class="fragment">Benefits from Web ecosystem (e.g developer tools)</p>
-						<p class="fragment">Editor availability</p>
-						<p class="fragment">Javascript is faster to write than C++</p>
-						<p class="fragment">Reuse of cool idioms (e.g tQuery)</p>
-					</section>
-				</section>
-				
-				<section>
-					<section>
-						<h2>Improvement ideas</h2>
-					</section>
-					<section>
-						<h2>Delivery process</h2>
-						<p class="fragment">Currently: automated build, but manual testing</p>
-						<p class="fragment">Release frequency of once week to twice day (closer to deadlines)</p>
-						<p class="fragment">Could benefit from automated testing</p>
-						<p class="fragment">Better reliability, possible faster releases</p>
-					</section>
-					<section>
-						<h2>Other ideas</h2>
+						<h2>Other improvement ideas</h2>
 						<p class="fragment">Tool usability not uniform</p>
 						<p class="fragment">Improve iteration times</p>
 						<p class="fragment">Simple things: use URIs for everything</p>
 					</section>
-					<section>
-						<h2>"Native" HTML5</h2>
-						<p class="fragment">Need tools to allow artist-driven production (Flash anyone?)</p>
-						<p class="fragment"><em>Some</em> engines have them (e.g ImpactJS, PlayCanvas)</p>
-						<p class="fragment">Interesting problem: communication with DCC tools</p>
-						<p class="fragment">Adobe Generator (Photoshop CC) is a start</p>
-					</section>
 				</section>
-				
-				<section>
-					<h2>Takeaway</h2>
-				</section>
-				<section data-background="#222" data-background-transition="slide">
-					<h2>Thanks</h2>
-					<p>TODO</p>
-				</section>
-				
-				<section data-state="demo" data-demo="questions">
-					<h2>Questions?</h2>
-					<p><small>And some more particles!</small></p>
-				</section>
-				
+			
 			</div>
 
 		</div>
