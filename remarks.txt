@@ -1,7 +1,0 @@
-== structure ==
-add conclusion (convergence)
-tips not obvious
-improve transitions
-more focused
-
-// pas JD comme exemple
