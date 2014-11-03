@@ -1,11 +1,11 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<title>Console vs. Web</title>
+		<meta charset="utf-8" />
+		<title>Web demo packing</title>
 
-		<meta name="description" content="Collision of two worlds: console versus web">
-		<meta name="author" content="Rémi Papillié">
+		<meta name="description" content="Web demo packing - Tricks and hacks behind FuckJS">
+		<meta name="author" content="Rémi Papillié (wsmind/tmp)">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -70,246 +70,330 @@
 
 			<div class="slides">
 				<section>
-					<h1>Collision of two worlds</h1>
-					<h3>Console versus Web</h3>
+					<h1>Web demo packing</h1>
+					<h3>Tricks and hacks behind <a href="http://tmp.graphics/releases/fuckjs">FuckJS</a></h3>
 					<p>
-						<small><a href="https://github.com/wsmind/">Rémi Papillié</a> / <a href="http://twitter.com/wsmind">@wsmind</a></small>
+						<small><a href="https://github.com/wsmind/">wsmind</a> / <a href="http://tmp.graphics">tmp</a></small>
 					</p>
 				</section>
 
-				<section>
-					<h2>Agenda</h2>
-					<p>Console and Web convergence</p>
-					<p>Web &amp; console legacy</p>
-					<p>Content creation pipelines</p>
-					<p>Improvement ideas</p>
+				<section data-background="assets/fuckjs-dark.png">
+					<h2>Prod context</h2>
+					<p>DemoJS invitation</p>
+					<p>Releasing more important than packing</p>
+					<p>Initial target 8k, final size 12k</p>
+				</section>
+
+				<section data-background="assets/tde-dark.png">
+					<h2>Bootstrapping new team tech</h2>
+					<p>Part of a bigger tooling effort (tmp demo engine)</p>
+					<p>Implies some level of preprocessing, to exclude edition-specific code</p>
+					<p>Automated packing is important for team iteration</p>
+				</section>
+
+				<section data-background="#a50" data-background-transition="slide">
+					<h2>Common packing techniques</h2>
 				</section>
 
 				<section>
-					<section>
-						<h2>Who am I?</h2>
-						<p><small>Wait! Who's this guy?</small></p>
-					</section>
-					<section data-background="assets/Ubilogo_Bg.png" data-background-size="2000px" data-background-position="left top">
-						<h2>Ubisoft (Paris)</h2>
-						<p class="fragment">Engine developer</p>
-						<p class="fragment">
-							<img src="assets/Just_Dance_2014_Official_NTSC_Cover_Art.jpg" alt="Just Dance 2014" />
-						</p>
-						<p class="fragment">Casual on console!</p>
-					</section>
-					<section data-state="demo" data-demo="spareTime">
-						<h2>Spare time</h2>
-						<div class="column-left fragment">
-							<h3>Demoparties</h3>
-							<p><img src="assets/js-pride.png" height="200px" alt="JS Pride" /></p>
-							<p><img src="assets/crteck.png" height="200px" alt="CRTeCK" /></p>
-						</div> 
-						<div class="column-right fragment">
-							<h3>Game jams</h3>
-							<p><img src="assets/kawaii-must-die.png" height="200px" alt="Kawaii Must Die" /></p>
-							<p><img src="assets/dont-play-with-me.jpg" height="200px" alt="Don't play with me" /></p>
-						</div> 
-					</section>
+					<h2>Smallness 101</h2>
+					<p>Everything procedural</p>
+					<p>No hand-drawn textures, models, ...</p>
 				</section>
 
 				<section>
-					<section>
-						<h2>You said collision?</h2>
-					</section>
-					<section>
-						<h2>Consoles are connected</h2>
-						<p class="fragment">Not only multiplayer gameplay</p>
-						<p class="fragment">Leaderboards, achievements (e.g XBLA)</p>
-						<p class="fragment">Analytics</p>
-						<p class="fragment">Social!</p>
-						<p class="fragment">XB1 attempt at always connected</p>
-					</section>
-					<section>
-						<h2>Gaming on the Web</h2>
-						<p class="fragment">Flash games</p>
-						<p class="fragment">Facebook games</p>
-						<p class="fragment">HTML5 ports of big engines (e.g Unreal, Unigine)</p>
-					</section>
-					<section>
-						<h2>PS4 in browser!</h2>
-						<iframe frameborder="0" height="480" width="854" allowFullScreen webkitallowfullscreen="true" mozallowfullscreen="true" src="http://sketchfab.com/m4jig20?autostart=0&transparent=0&autospin=0&controls=1"></iframe>
-						<p>Model by Volumic @ Sketchfab</p>
-					</section>
+					<h2>Minification</h2>
+					<h3>Closure Compiler</h3>
+					<pre><code data-trim>
+function computeSum(a, b, c)
+{
+  return a + b + c
+}
+
+alert(computeSum(1, 2, 3))					</code></pre>
+					<pre><code data-trim>
+alert(6);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>PNG hack</h2>
+					<h3>demo.js.png.html, all included</h3>
+					<img src="assets/png-hack.png" />
+				</section>
+
+				<section data-background="#a50" data-background-transition="slide">
+					<h2>The shader problem</h2>
+				</section>
+				
+				<section>
+					<h2>Shaders are JS strings - they won't minify!</h2>
+					<pre><code data-trim>
+function Vb(a,c){Nb.forEach(function(a,d){n=c[d];"object"!==typeof n
+&&(n=[n,{}]);0!=n[0]&&this.pa(a,.12,n)},a)}
+var sb="void main_fs_city() {
+
+  vec4 texture = texture2D(texture_0, v_tex_coords);
+
+  vec2 uv2 = v_tex_coords * 200.0;
+  vec3 fakeNormalMap = (noise3(uv2) - 0.5) * (1.0 - texture.a) * 0.1;
+  vec3 normal = normalize(normalize(v_normals) + fakeNormalMap);
+  vec3 diffuse = (dot(normal, light) * 0.5 + 0.5) * skyColor(normal) * texture.rgb;
+"
+function dc(a,c,b,d,f){var e=JSON.parse(JSON.stringify(c));c=la(e,.5,0);f=f||0;}
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>Use another minifier!</h2>
+					<h3>glsl-unit, ctrl+alt+test</h3>
+					<pre><code data-trim>
+void W(){vec3 f=normalize((view_proj_mat_inv*vec4(a,1,1)).xyz);gl_FragColor=
+vec4(N(f)+M(f),1);}void X(){gl_FragColor=texture2D(texture_0,a)*mask;}
+					</code></pre>
+					<p>
+						Minifies everything but:
+						<ul>
+							<li>Keywords</li>
+							<li>Uniforms</li>
+							<li>Attributes</li>
+						</ul>
+					</p>
+				</section>
+				
+				<section>
+					<h2>Can we do better?</h2>
+					<pre><code data-trim>
+var backgroundFragmentShader="precision highp float;uniform float time;uniform vec2 res;const float a=1e4;const vec3 b=vec3(.7,.9,1);const float c=.004;const vec3 d=vec3(.5,1,.9);float n(vec3 e){return length(max(abs(e)-vec3(10),0.));}float o(vec3 e){float f,g,h;f=sin(time*.1)*.004;g=cos(e.z*f);h=sin(e.z*f);mat2 i=mat2(g,-h,h,g);e.xy=i*e.xy;return n(mod(e-vec3(-5.,0,50.-time*1e2),50.)-vec3(25));}vec3 p(vec3 e){float f=.01;vec3 g;g.x=o(vec3(e.x+f,e.y,e.z))-o(vec3(e.x-f,e.y,e.z));g.y=o(vec3(e.x,e.y+f,e.z))-o(vec3(e.x,e.y-f,e.z));g.z=o(vec3(e.x,e.y,e.z+f))-o(vec3(e.x,e.y,e.z-f));return normalize(g);}vec3 q(float e){float f,g,h,i;f=floor(e*6.);g=float(f<=2.)+float(f>4.)*.5;h=max(1.-abs(f-2.)*.5,0.);i=(1.-(f-4.)*.5)*float(f>=4.);return vec3(g,h,i);}float r(vec3 e,vec3 f,float g){float h=g;e+=f*g;for(int i=0;i<5;i++){e+=f;h=min(h,max(o(e),0.));}return h/g;}vec3 s(vec3 e,vec3 f){for(int g=0;g<40;g++){float h=o(e);e+=.9*h*f;}return e;}void main(){vec3 e,f,g,h,i,j;e=vec3(cos(time*.7)*5.,sin(time*.4)*10.+12.,0);f=normalize(vec3((gl_FragCoord.x-res.x*.5)/res.y,gl_FragCoord.y/res.y-.5,1));h=s(e,f);i=p(h);j=vec3(1);float k,l,m;k=1.-1./exp(h.z*c);l=r(h,i,5.);m=max(dot(i,vec3(.707,.707,0)),0.);g=mix(j*m*l,q(gl_FragCoord.y/res.y+sin(time+gl_FragCoord.x*10./res.x)*.1),k);gl_FragColor=vec4(g,1);}"
+var backgroundVertexShader="precision highp float;uniform float time;uniform vec2 res;attribute vec2 vertexPos;void main(){gl_Position=vec4(vertexPos,0,1);}"
+var rainbowFragmentShader="precision highp float;uniform float time;varying float a;vec3 g(float b){float c,d,e,f;c=floor(b*6.);d=float(c<=2.)+float(c>4.)*.5;e=max(1.-abs(c-2.)*.5,0.);f=(1.-(c-4.)*.5)*float(c>=4.);return vec3(d,e,f);}void main(){gl_FragColor=vec4(g(a),1);}"
+var rainbowVertexShader="precision highp float;uniform float time;varying float a;attribute vec2 pos;void main(){a=-pos.y*.5+.5;gl_Position=vec4(pos*vec2(1,sin(pos.x*.8)*.2+.2),0,1);gl_Position.y+=sin(time+pos.x)*.4;}"
+var wireFragmentShader="precision highp float;uniform float time,ratio;uniform vec2 q;void main(){gl_FragColor=vec4(1,1,0,1);}"
+var wireVertexShader="precision highp float;uniform float time,ratio;uniform vec2 q;attribute vec3 pos;void main(){float a,b;a=cos(time);b=sin(time);mat2 c=mat2(a,-b,b,a);gl_Position=vec4(pos.xzy*vec3(q.x,1,q.y)*.01,1);gl_Position.xz=c*gl_Position.xz;gl_Position.x/=ratio;gl_Position.y+=sin(gl_Position.x+time*5.)*.2-2.;gl_Position.w=gl_Position.z+5.;}"
+					</code></pre>
+					<p>Uniforms and attributes are duplicated</p>
+					<p>Common code is duplicated (eg. lighting, noise)</p>
+				</section>
+				
+				<section>
+					<h2>Merge all shaders into one</h2>
+					<p>Cat all shader code to one file</p>
+					<p>Use multiple entry points</p>
+					<pre><code data-trim>
+//! VERTEX
+void main_vs_quad() {
+  gl_Position = vec4(text_params.xy + position.xy * text_params.zw, 0.0, 1.0);
+  v_tex_coords = position.xy * 0.5 + 0.5;
+}
+
+//! FRAGMENT
+void main_fs_quad() {
+  gl_FragColor = texture2D(texture_0, v_tex_coords) * mask;
+}
+
+//! VERTEX
+void main_vs_sky() {
+  gl_Position = vec4(position.xy, 0.0, 1.0);
+  v_tex_coords = position.xy * vec2(resolution.x / resolution.y, 1.0);
+}
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>Minifier <strike>patches</strike> hacks</h2>
+					<p>Broken dead code elemination with custom entry points</p>
+					<p>Export minified entry point names</p>
+				</section>
+				
+				<section>
+					<h2>shaders.js</h2>
+					<pre><code data-trim>
+var vs_shader_source='precision lowp float;uniform vec3 cam_pos,light;uniform mat4 view_proj_mat,view_proj_mat_inv;uniform vec2 resolution;uniform float focus,clip_time,glitch;uniform sampler2D texture_0,texture_1,texture_2,texture_3,texture_4;uniform vec4 text_params,mask;varying vec2 a;varying vec3 b,c;attribute vec3 position,normals;attribute vec2 tex_coords;void h(){float e,f;e=cos(text_params.w);f=sin(text_params.w);mat2 g=mat2(e,-f,f,e);gl_Position=vec4(text_params.xy+g*position.xy*vec2(resolution.y/resolution.x,-1.)*text_params.z,0,1);a=position.xy*.5+.5;}void i(){gl_Position=vec4(position.xy,0,1);a=position.xy*.5+.5;}void j(){gl_Position=view_proj_mat*vec4(position+vec3(0,sin(position.x*position.z/1e5)*20.,0),1);c=position;b=normals;a=tex_coords;}vec3 d=vec3(.9,.9,.8);void k(){gl_Position=vec4(position.xy,0,1);a=(vec2(1)+position.xy)/2.;}void l(){gl_Position=vec4(position.xy,0,1);a=position.xy*.5+.5;}void m(){gl_Position=vec4(text_params.xy+position.xy*text_params.zw,0,1);a=position.xy*.5+.5;}void n(){gl_Position=vec4(position.xy,0,1);a=position.xy*vec2(resolution.x/resolution.y,1);}void o(){gl_Position=vec4(text_params.xy+position.xy*vec2(text_params.w*resolution.y/resolution.x,-1.)*text_params.z,0,1);a=position.xy*.5+.5;}'
+var fs_shader_source='precision lowp float;uniform vec3 cam_pos,light;uniform mat4 view_proj_mat,view_proj_mat_inv;uniform vec2 resolution;uniform float focus,clip_time,glitch;uniform sampler2D texture_0,texture_1,texture_2,texture_3,texture_4;uniform vec4 text_params,mask;varying vec2 a;varying vec3 b,c;void C(){gl_FragColor=texture2D(texture_0,a)*mask;}float D(float f){return fract(sin(f)*43758.5453123);}float E(vec2 f){return fract(sin(dot(f.xy,vec2(12.9898,78.233)))*43758.5453);}float F(in vec2 f){vec2 g,h;g=floor(f);h=fract(f);h=h*h*(3.-2.*h);float i,j;i=g.x+g.y*57.;j=mix(mix(D(i+0.),D(i+1.),h.x),mix(D(i+57.),D(i+58.),h.x),h.y);return j;}vec3 G(vec2 f){return vec3(F(f),F(f+2.7),F(f+5.8));}float H(vec2 f,float g,float h,float i,float j){if(f.x>g&&f.xi&&f.y>h&&f.yj)return 1.;return 0.;}float I(vec2 f,float g,float h,float i,float j){if((f.x-g)*(f.x-g)/(i*i)+(f.y-h)*(f.y-h)/(j*j)1.)return 1.;return 0.;}float J(vec2 f){f=mod(f,.02);return I(f,.01,.01,.01,.01)*(1.-I(f,.01,.01,.005,.005));}void K(){vec2 f=a;float g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w;g=.3;h=.02;i=.36;j=.52;k=.1;l=.15;m=.02;n=H(f,0.,.5,1.,.55)*J(f);o=H(f,g,i,.5-h,i+k)+H(f,.5+h,i,1.-g,i+k)+H(f,g,j,.5-h,j+l)+H(f,.5+h,j,1.-g,j+l)+H(f,.15,.13,.4,.25)+H(f,.45,.13,.8,.2);o*=1.-n;p=H(f,g-h,i-m,1.-g+h,i)+I(f,.5,i+k,.22,.02)*H(f,0.,i+k,1.,.5);q=H(f,.03,.1,.13,.25)+H(f,.85,.1,.95,.25)+H(f,.45,.21,.8,.25);r=H(f,0.,.1,1.,.9)-o-p-n-q;s=H(f,0.,.9,1.,1.);t=H(f,0.,0.,.5,.05);u=H(f,0.,.05,1.,.1);v=H(f,.5,0.,1.,.05);w=1.-mod(f.y-.1,.2)*.4;vec3 x=o*vec3(.1)+r*vec3(w,w*.9,w*.7)+s*vec3(.2,.2,.4)*sin(f.x*1e3)+v*vec3(0,.7,.1)+t*vec3(.3)+u*vec3(.5)+p*vec3(.6,.5,.4)+n*vec3(.2)+q*vec3(.5,.1,.1);x*=1.-n;gl_FragColor=vec4(x,o+n+(t+s)*F(f*5e2));}vec3 d=vec3(.9,.9,.8);float L(vec3 f){return dot(f,light)*.5+.5;}vec3 M(vec3 f){float g=pow(L(f),16.);return g*d;}vec3 N(vec3 f){return mix(vec3(.75,.8,.9),vec3(1,.9,.7),L(f));}vec3 O(vec3 f,vec3 g){float h,i;h=distance(c,cam_pos);i=exp(-h*.01);return mix(N(f),g,i);}void P(){vec4 f=texture2D(texture_0,a);vec2 g=a*2e2;vec3 h,i,j,k,l,m,n;h=(G(g)-.5)*(1.-f.a)*.1;i=normalize(normalize(b)+h);j=(dot(i,light)*.5+.5)*N(i)*f.rgb;k=normalize(cam_pos-c);l=normalize(k+light);m=pow(dot(l,i),1e2)*vec3(f.a);n=clamp(j+m,0.,1.);gl_FragColor=vec4(O(i,n),1);}const float e=.03;float Q(vec2 f){return texture2D(texture_1,a+f).r;}float R(float f){return 8e3/(2002.-(2.*f-1.)*1998.);}float S(float f){const float g=1e2;return clamp(abs(f-focus)/g,0.,1.)*e;}void T(){float f,g,h,i,j,k,l,m,n,o,p,q,r,s,v;f=1./resolution.x;g=1./resolution.y;h=Q(vec2(0));i=Q(vec2(f,0));j=Q(vec2(-f,0));k=Q(vec2(0,g));l=Q(vec2(0,-g));m=Q(vec2(f,g));n=Q(vec2(f,-g));o=Q(vec2(-f,g));p=Q(vec2(-f,-g));q=o+2.*j+p-m-2.*i-n;r=-o-2.*k-m+p+2.*l+n;s=1.-10.*sqrt(q*q+r*r);vec2 t[16];t[0]=vec2(-.613392,.617481);t[1]=vec2(.170019,-.040254);t[2]=vec2(-.299417,.791925);t[3]=vec2(.64568,.49321);t[4]=vec2(-.651784,.717887);t[5]=vec2(.421003,.02707);t[6]=vec2(-.817194,-.271096);t[7]=vec2(-.705374,-.668203);t[8]=vec2(.97705,-.108615);t[9]=vec2(.063326,.142369);t[10]=vec2(.203528,.214331);t[11]=vec2(-.667531,.32609);t[12]=vec2(-.098422,-.295755);t[13]=vec2(-.885922,.215369);t[14]=vec2(.566637,.605213);t[15]=vec2(0);vec3 u=vec3(0);v=0.;for(int w=0;w16;w++){vec2 x=t[w]*e;float y=Q(x);if(y=h){float z,A,B;z=R(y);A=S(z);B=smoothstep(A,A*.5,length(x));u+=B*texture2D(texture_0,a+x).rgb;v+=B;}}u/=v;gl_FragColor=vec4(u*s,1);}void U(){vec2 f,i;f=a;float g,h,j,k;g=floor(F(vec2(clip_time*4.,0))*2.);h=D(floor(f.y*30.)+g*50.*clip_time)-.5;i=floor(f*5.+vec2(h*2.*g,0)*floor(glitch*20.)/1e2)/5.;j=floor(E(i+floor(clip_time*10.)))/2.;k=floor(f.y*20.+E(i)*1e2)/1e2;vec3 l=texture2D(texture_0,f+vec2(j+k,j)*glitch).rgb;l+=vec3(E(f+clip_time))*glitch*.3;l*=1.-pow(length(f-.5)*1.2,4.);gl_FragColor=vec4(l,1);}void V(){gl_FragColor=texture2D(texture_0,a)*mask;}void W(){vec3 f=normalize((view_proj_mat_inv*vec4(a,1,1)).xyz);gl_FragColor=vec4(N(f)+M(f),1);}void X(){gl_FragColor=texture2D(texture_0,a)*mask;}'
+programs = {}
+function load_shaders()
+{
+programs.badge = load_shader_program('h', 'C');
+programs.buildings_mtl = load_shader_program('i', 'K');
+programs.city = load_shader_program('j', 'P');
+programs.depth_of_field = load_shader_program('k', 'T');
+programs.posteffect = load_shader_program('l', 'U');
+programs.quad = load_shader_program('m', 'V');
+programs.sky = load_shader_program('n', 'W');
+programs.text = load_shader_program('o', 'X');
+}
+					</code></pre>
 				</section>
 				
 				<section data-background="#a50" data-background-transition="slide">
-					<h2>So, Web and console are now the same industry?</h2>
-				</section>
-				<section data-background="#500" data-background-transition="slide">
-					<h2>No.</h2>
-					<p><small>But why?</small></p>
+					<h2>Pushing it</h2>
 				</section>
 				
 				<section>
-					<section>
-						<h2>Web legacy</h2>
-					</section>
-					<section>
-						<h2>Everything Open Source</h2>
-						<p class="fragment">In line with Internet base principles</p>
-						<p class="fragment">Not free, not used</p>
-						<p class="fragment">Service-oriented</p>
-					</section>
-					<section>
-						<h2>Easy deployment</h2>
-						<p class="fragment">Hosting is cheap</p>
-						<p class="fragment">F5 updates your software</p>
-						<p class="fragment">Continuous integration/deployment</p>
-						<p class="fragment">=> Lots of tests</p>
-					</section>
-					<section>
-						<h2>Release early, profit later (maybe)</h2>
-						<p class="fragment">Hard to be profitable from the start</p>
-						<p class="fragment">Usually start small, then grow</p>
-						<p class="fragment">Increased need for visible, immediate value</p>
-						<p class="fragment">Side effect: encouraged accessibility and ergonomy</p>
-					</section>
-					<section>
-						<h2>Developer-centric</h2>
-						<p class="fragment">Most of web tools are code-based (html, css, js, etc.)</p>
-						<p class="fragment">Realm of designer-coders</p>
-						<p class="fragment">Few artists, in proportion</p>
-					</section>
+					<h2>Some symbols still survive</h2>
+					<pre><code data-trim>
+function K(){h.disable(h.DEPTH_TEST);h.bindBuffer(h.ARRAY_BUFFER,mb);
+h.vertexAttribPointer(0,2,h.FLOAT,!1,0,0);h.enableVertexAttribArray(0);
+h.drawArrays(h.TRIANGLE_STRIP,0,4)}function pb(){var a=jb;return function()
+{h.enable(h.DEPTH_TEST);for(var c in a.I){var b=a.I[c];}
+					</code></pre>
+					<p>Mostly context calls (WebGL, WebAudio, Canvas)</p>
 				</section>
 				
 				<section>
-					<section>
-						<h2>Console legacy</h2>
-					</section>
-					<section>
-						<h2>Traditionally closed</h2>
-						<p class="fragment">Nothing open source</p>
-						<p class="fragment">Open source is <em>forbidden</em></p>
-						<p class="fragment">Expensive (e.g some devkits cost $20,000)</p>
-						<p class="fragment">Certification process</p>
-					</section>
-					<section>
-						<h2>One-shot releases</h2>
-						<p class="fragment">Burn and forget <span class="fragment">(&gt; 50% console market)</span></p>
-						<p class="fragment">But you can update! <span class="fragment">Yeah, well...</span></p>
-						<p class="fragment">Not all platforms (Wii)</p>
-						<p class="fragment">Still heavy and expensive process</p>
-						<p class="fragment">Side effect: bad code at end of production</p>
-					</section>
-					<section>
-						<h2>One-shot marketing</h2>
-						<p class="fragment">You only got one try!</p>
-						<p class="fragment"><img src="assets/typical-sales.png" alt="Sales" /></p>
-					</section>
-					<section>
-						<h2>Production-centric</h2>
-						<p class="fragment">Developers only support production</p>
-						<p class="fragment">Few of them compared to artists (~10%)</p>
-						<p class="fragment">Most tools usable by artists (no code required)</p>
-						<p class="fragment">Data-driven engines</p>
-					</section>
+					<h2>What if?</h2>
+					<pre><code data-trim>
+function K(){h.disable(h.DEPTH_TEST);h.bindBuffer(h.ARRAY_BUFFER,mb);
+h.vertexAttribPointer(0,2,h.FLOAT,!1,0,0);h.enableVertexAttribArray(0);
+h.drawArrays(h.TRIANGLE_STRIP,0,4)}function pb(){var a=jb;return function()
+{h.enable(h.DEPTH_TEST);for(var c in a.I){var b=a.I[c];}
+					</code></pre>
+					<p>could be changed to</p>
+					<pre><code data-trim>
+function K(){h.d(h.DT);h.bB(h.AB2,mb);
+h.vAP(0,2,h.F2,!1,0,0);h.eVAA(0);
+h.dA(h.TS,0,4)}function pb(){var a=jb;return function()
+{h.e(h.DT);for(var c in a.I){var b=a.I[c];}
+					</code></pre>
+				</section>
+				
+				<section>
+					<pre><code data-trim>
+function minify_context(ctx)
+{
+  var names = []
+  for (var name in ctx) names.push(name);
+  names.sort();
+  
+  for (var i in names)
+  {
+    var name = names[i]
+    
+    // add an underscore to shader variables, to avoid conflict with glsl-unit minification
+    // #debug{{
+    var shader = false
+    if (name.match(/^shader_/))
+    {
+      shader = true;
+      name = name.substr(7);
+    }
+    // #debug}}
+    
+    var m, newName = "";
+    var re = /([A-Z0-9])[A-Z]*_?/g;
+    if (name.match(/[a-z]/))
+      re = /(^[a-z]|[A-Z0-9])[a-z]*/g;
+    while (m = re.exec(name)) newName += m[1];
+    
+    // #debug{{
+    if (shader)
+      newName = "_" + newName;
+    // #debug}}
+    
+    if (newName in ctx)
+    {
+      var index = 2;
+      while ((newName + index) in ctx) index++;
+      newName = newName + index;
+    }
+    
+    ctx[newName] = ctx[name];
+    
+    // #debug{{
+    // don't minify properties that are neither objects nor constants (or that map to strings)
+    var preservedNames = ["canvas", "currentTime", "destination", "font", "fillStyle", "globalCompositeOperation", "lineWidth"]
+    if (preservedNames.indexOf(name) != -1)
+      continue;
+    
+    if (name in symbolMap)
+    {
+      if (symbolMap[name] != newName)
+      {
+        alert("Symbol " + name + " packed differently for multiple contexts (" + symbolMap[name] + ", " + newName + ")");
+      }
+    }
+    symbolMap[name] = newName;
+    // #debug}}
+  }
+}
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>Symbol map</h2>
+					<pre><code data-trim>
+{
+  "addEventListener":"aEL",
+  "createAnalyser":"cA",
+  "createBiquadFilter":"cBF",
+  "createBuffer":"cB",
+  "createBufferSource":"cBS",
+  "createChannelMerger":"cCM",
+  "createChannelSplitter":"cCS",
+  // etc.
+}
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>ad-hoc sed (full word replace)</h2>
+					<pre><code data-trim>
+for (var symbol in symbolMap)
+{
+  var newName = symbolMap[symbol];
+  code = code.replace(new RegExp("([^a-zA-Z0-9_])" + symbol
+           + "([^a-zA-Z0-9_])", "g"), "$1" + newName + "$2");
+}
+					</code></pre>
+					<p>Executed <i>after</i> closure compiler</p>
 				</section>
 				
 				<section data-background="#a50" data-background-transition="slide">
-					<h2>Legacy changes the way we make games</h2>
+					<h2>Other things we tried</h2>
 				</section>
 				
 				<section>
-					<section>
-						<h2>How are games made?</h2>
-					</section>
-					<section>
-						<h2>Console pipeline</h2>
-						<p class="fragment"><img src="assets/console-pipeline.png" height="500px" alt="Console production pipeline" /></p>
-					</section>
-					<section>
-						<h2>HTML5 pipelines</h2>
-						<div class="column-left fragment">
-							<h3>Cross-compile</h3>
-							<p class="fragment">Natural path for existing techs</p>
-							<p class="fragment">Suited for cross-platform</p>
-							<p class="fragment">Some shortcomings though (e.g threading)</p>
-						</div>
-						<div class="column-right fragment">
-							<h3>Write JS</h3>
-							<p class="fragment">Web ecosystem (tools)</p>
-							<p class="fragment">Javascript faster to write than C++</p>
-							<p class="fragment">Editor availability</p>
-							<p class="fragment">Reuse cool idioms</p>
-						</div> 
-					</section>
-				</section>
-				
-				<section data-background="#580" data-background-transition="slide">
-					<h2>Maybe we could share some tips</h2>
+					<h2>Minifying very frequent symbols</h2>
+					<pre><code data-trim>
+sed -i 's/function/@/g' $EXPORT_ROOT/demo.min2.js
+sed -i 's/return/`/g' $EXPORT_ROOT/demo.min2.js
+sed -i 's/var/~/g' $EXPORT_ROOT/demo.min2.js
+					</code></pre>
+					<p>Didn't gain much, huffman (from PNG packing) already excels at this</p>
 				</section>
 				
 				<section>
-					<section>
-						<h2>Improvement ideas</h2>
-					</section>
-					<section>
-						<h2>Process example:<br />engine delivery</h2>
-						<p class="fragment">Currently: automated build, but manual testing</p>
-						<p class="fragment">Max release frequency: twice a day (closer to deadlines)</p>
-						<p class="fragment">Could benefit from automated testing</p>
-						<p class="fragment">Better reliability, possible faster releases</p>
-					</section>
-					<section>
-						<h2>JS engines</h2>
-						<p class="fragment">Need tools to allow artist-driven production (Flash anyone?)</p>
-						<p class="fragment"><em>Some</em> techs have them</p>
-						<p class="fragment">Interesting problem: communication with DCC tools</p>
-						<p class="fragment">Adobe Generator (Photoshop CC) is a start</p>
-					</section>
+					<h2>Using libs (glMatrix, thx @tojiro!)</h2>
+					<p>It works, and can be minified</p>
+					<p>Make sure you remove the few things that prevent minification</p>
+					<pre><code data-trim>
+// very popular anti-minification pattern
+(function(){
+  // lib code
+})()
+					</code></pre>
+					<p>Some function entirely reimplemented for size (lookAt)</p>
+				</section>
+				
+				<section data-background="#a50" data-background-transition="slide">
+					<h2>Size matters</h2>
 				</section>
 				
 				<section>
-					<h2>Takeaway</h2>
-					<p class="fragment">We're all making games, but in different ways</p>
-					<p class="fragment">Sharing knowledge between technologies is valuable</p>
-					<p class="fragment">Put the artists in charge!</p>
-					<p class="fragment">Thanks</p>
+					<h2>Results</h2>
+					<pre><code data-trim>
+$ wc -c *
+ 193370 demo.js
+  36798 demo.min.js
+  32273 demo.min2.js
+  12230 demo.png.html
+					</code></pre>
 				</section>
 				
 				<section data-state="demo" data-demo="questions">
 					<h2>Questions?</h2>
-					<p><small>And some more particles!</small></p>
+					<p><small>And particles!</small></p>
 				</section>
-				
-				<section>
-					<section>
-						<h2>Bonus slides</h2>
-					</section>
-					<section>
-						<h2>Cross-compile C++ to js</h2>
-						<p><small>(code! finally!)</small></p>
-<pre class="fragment"><code>#if defined(ANDROID) || defined(EMSCRIPTEN)
-    GL_CHECK(glClearDepthf(depth));
-#else
-    GL_CHECK(glClearDepth(depth));
-#endif
-</code></pre>
-<pre class="fragment"><code>#ifdef EMSCRIPTEN
-    emscripten_set_main_loop(em_main_loop, 0, 0);
-#else
-    while (glfwGetWindowParam(GLFW_OPENED))
-    {
-        application->update();
-        glfwSwapBuffers();
-    }
-#endif
-</code></pre>
-					</section>
-					<section>
-						<h2>Other improvement ideas</h2>
-						<p class="fragment">Tool usability not uniform</p>
-						<p class="fragment">Improve iteration times</p>
-						<p class="fragment">Simple things: use URIs for everything</p>
-					</section>
-				</section>
-			
 			</div>
 
 		</div>
