@@ -1,8 +1,10 @@
-﻿ongamestart2013-slides
-======================
+﻿DemoJS 2014 - Web Demo Packing
+==============================
 
-Slides from my talk at onGameStart 2013.
+Slides from my talk about at DemoJS 2014.
 
-Copyright 2013 Rémi Papillié.
+Copyright 2014 Rémi Papillié.
 
 Made using the awesome [reveal.js](http://lab.hakim.se/reveal-js/).
+
+Video coming soon...
